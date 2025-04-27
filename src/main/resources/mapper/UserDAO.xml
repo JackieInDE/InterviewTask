@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.meet5.dao.UserDAO">
+
+    <resultMap id="BaseResultMap" type="com.meet5.pojo.User" >
+        <result column="name" property="name" />
+        <result column="job" property="job" />
+        <result column="gender" property="gender" typeHandler="com.meet5.handler.GenderHandler"/>
+        <result column="birthday" property="birthday" />
+        <result column="location_id" property="locationId" />
+        <result column="account_status" property="accountStatus" />
+        <result column="relationship_status" property="relationshipStatus" />
+        <result column="profile_picture_id" property="profilePictureId" />
+        <result column="created_time" property="createdTime" />
+        <result column="created_by" property="createdBy" />
+        <result column="updated_time" property="updatedTime" />
+        <result column="updated_by" property="updatedBy" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        name,
+        job,
+        gender,
+        birthday,
+        location_id,
+        account_status,
+        relationship_status,
+        profile_picture_id,
+        created_time,
+        created_by,
+        updated_time,
+        updated_by
+    </sql>
+
+
+    <update id="updateStatus">
+        UPDATE users
+        SET account_status = #{userStatus}
+        WHERE id = #{userId}
+    </update>
+
+    <select id="selectNormalUsersByIdList" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM users
+        WHERE id IN
+        <foreach collection="list" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+        AND account_status = 'ACTIVE'
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyColumn="id" keyProperty="id" parameterType="com.meet5.pojo.User">
+        INSERT INTO users
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="null != name and '' != name">
+                name,
+            </if>
+            <if test="null != job and '' != job">
+                job,
+            </if>
+            <if test="null != gender ">
+                gender,
+            </if>
+            <if test="null != birthday ">
+                birthday,
+            </if>
+            <if test="null != locationId ">
+                location_id,
+            </if>
+            <if test="null != accountStatus and '' != accountStatus">
+                account_status,
+            </if>
+            <if test="null != relationshipStatus and '' != relationshipStatus">
+                relationship_status,
+            </if>
+            <if test="null != profilePictureId ">
+                profile_picture_id,
+            </if>
+            <if test="null != createdTime ">
+                created_time,
+            </if>
+            <if test="null != createdBy and '' != createdBy">
+                created_by,
+            </if>
+            <if test="null != updatedTime ">
+                updated_time,
+            </if>
+            <if test="null != updatedBy and '' != updatedBy">
+                updated_by
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="null != name and '' != name">
+                #{name},
+            </if>
+            <if test="null != job and '' != job">
+                #{job},
+            </if>
+            <if test="null != gender ">
+                #{gender},
+            </if>
+            <if test="null != birthday ">
+                #{birthday},
+            </if>
+            <if test="null != locationId ">
+                #{locationId},
+            </if>
+            <if test="null != accountStatus and '' != accountStatus">
+                #{accountStatus},
+            </if>
+            <if test="null != relationshipStatus and '' != relationshipStatus">
+                #{relationshipStatus},
+            </if>
+            <if test="null != profilePictureId ">
+                #{profilePictureId},
+            </if>
+            <if test="null != createdTime ">
+                #{createdTime},
+            </if>
+            <if test="null != createdBy and '' != createdBy">
+                #{createdBy},
+            </if>
+            <if test="null != updatedTime ">
+                #{updatedTime},
+            </if>
+            <if test="null != updatedBy and '' != updatedBy">
+                #{updatedBy}
+            </if>
+        </trim>
+    </insert>
+
+
+</mapper>
